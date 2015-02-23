@@ -8,7 +8,7 @@ class StyleTransfer {
 
         BYTE *wholeData;
         static const std::string styleTextList;
-        glm::vec4 transferFunctionValues[256];
+        glm::vec2 transferTexture[256];
 
         bool stylesLoaded;
         unsigned int transferFunctionTexture;

@@ -1,5 +1,6 @@
 #version 400
 #define LIGHTING
+#define AVAILABLE_STYLE_COUNT 34
 
 in vec3 EntryPoint;
 in vec4 ExitPointCoord;
@@ -15,7 +16,7 @@ uniform vec2      ScreenSize;
 
 // style transfer function uniforms
 uniform sampler1D transferFunctionTexture;
-uniform usampler1D indexFunctionTexture;
+uniform sampler1D indexFunctionTexture;
 uniform sampler2DArray styleTransferTexture;
 
 layout(location = 0) out vec4 FragColor;
@@ -39,6 +40,16 @@ float blinn_spec(vec3 normal, vec3 lightDir, vec3 viewDir, float shininess) {
   return pow(specAngle, shininess);
 }
 
+vec2 litsphere_map(vec3 normal, vec3 position) {
+  vec3 r = reflect(position, normal);
+  float m = 2.f * sqrt(
+    pow(r.x, 2.f) +
+    pow(r.y, 2.f) +
+    pow(r.z + 1.f, 2.f)
+    );
+  return (r.xy / m + 0.5f).xy;
+}
+
 void main()
 {
     vec3 exitPoint = texture(ExitPoints, gl_FragCoord.st / ScreenSize).xyz;
@@ -54,31 +65,39 @@ void main()
 
     vec3 pos = EntryPoint;
     vec4 dst = vec4(0.f);
-    vec3 lightDir = normalize(lightPos - EntryPoint);
-    vec3 viewDir = normalize(-EntryPoint);
 
     while(dst.a < 1.f && rayLength > 0.f) {
-		float density = texture(VolumeTex, pos).x;
+  		float density = texture(VolumeTex, pos).x;
 
-		if(density > Threshold){
-			// apply color
-			vec4 src = texture(TransferFunc, density);
-			src.rgb *= src.a;
-			// apply lighting
-      #ifdef LIGHTING
-  			vec3 normal = (mat4(NormalMatrix) * vec4(computeGradient(pos, density), 0.f)).xyz;
-  			float diffuse = lambert(normal, lightPos);
-  			float specular = blinn_spec(normal, lightDir, viewDir, 16.f);
-  			float ambient = 0.1f * src.rgb;
-  			src.rgb = src.rgb * (diffuse + specular) + ambient;
-      #endif
-			// add to resuelt
-			dst = (1.f - dst.a) * src + dst;
-			// break;
-		}
-		// move further into the volume
-		pos += stepVector;
-		rayLength -= StepSize;
+      if(density > Threshold) {
+        float opacity = texture(transferFunctionTexture, density).g;
+        float index = texture(transferFunctionTexture, density).r;
+        int materialIndex = int(texture(indexFunctionTexture, index).x * AVAILABLE_STYLE_COUNT);
+
+    	  // apply litsphere
+        vec3 normal = (mat4(NormalMatrix) * vec4(computeGradient(pos, density), 0.f)).xyz;
+        vec4 baseColor = texture(styleTransferTexture, vec3(litsphere_map(normal, pos).xy, materialIndex));
+
+        // src value
+        vec4 src = vec4(baseColor.rgb, opacity);
+
+        // add lighting
+        #ifdef LIGHTING
+    			float diffuse = lambert(normal, lightPos);
+    			float ambient = 0.1f * src.rgb; // fake ambient light
+    			src.rgb = (src.rgb * diffuse) + ambient;
+        #endif
+
+        // add to result
+        src.a = 1.0 - pow(1.0 - src.a, StepSize * 256.0f);
+        src.rgb *= src.a;
+    		dst = (1.f - dst.a) * src + dst;
+        dst.a += (1.0 - dst.a) * src.a;
+      }
+
+  		// move further into the volume
+  		pos += stepVector;
+  		rayLength -= StepSize;
     }
 
     FragColor = dst;

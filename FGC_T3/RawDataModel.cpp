@@ -336,7 +336,10 @@ void RawDataModel::setupVolumeShaders()
     this->rayCastShader.addUniform("MVP");
     this->rayCastShader.addUniform("VolumeTex");
     this->rayCastShader.addUniform("ExitPoints");
-    this->rayCastShader.addUniform("TransferFunc");
+    // this->rayCastShader.addUniform("TransferFunc");
+    this->rayCastShader.addUniform("transferFunctionTexture");
+    this->rayCastShader.addUniform("indexFunctionTexture");
+    this->rayCastShader.addUniform("styleTransferTexture");
     this->rayCastShader.addUniform("StepSize");
     this->rayCastShader.addUniform("ViewMatrix");
     this->rayCastShader.addUniform("ScreenSize");
@@ -354,15 +357,23 @@ void RawDataModel::renderVolumeRayCasting()
     this->rayCastShader.setUniform("StepSize", this->stepSize);
     this->rayCastShader.setUniform("Threshold", this->threshold);
     this->rayCastShader.setUniform("ScreenSize", (float)MainData::rootWindow->getSize().x, (float)MainData::rootWindow->getSize().y);
+    // style transfer function
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_1D, this->transferFunctionTexture);
-    this->rayCastShader.setUniform("TransferFunc", 1);
+    glBindTexture(GL_TEXTURE_1D, this->stf.transferFunctionTexture);
+    this->rayCastShader.setUniform("transferFunctionTexture", 1);
     glActiveTexture(GL_TEXTURE2);
-    glBindTexture(GL_TEXTURE_2D, this->backFaceTexture);
-    this->rayCastShader.setUniform("ExitPoints", 2);
+    glBindTexture(GL_TEXTURE_1D, this->stf.indexFunctionTexture);
+    this->rayCastShader.setUniform("indexFunctionTexture", 2);
     glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, this->stf.styleFunctionTexture);
+    this->rayCastShader.setUniform("styleTransferTexture", 3);
+    // back face and volume
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, this->backFaceTexture);
+    this->rayCastShader.setUniform("ExitPoints", 4);
+    glActiveTexture(GL_TEXTURE5);
     glBindTexture(GL_TEXTURE_3D, this->volumeTexture);
-    this->rayCastShader.setUniform("VolumeTex", 3);
+    this->rayCastShader.setUniform("VolumeTex", 5);
     renderCubeFace(GL_BACK);
 }
 

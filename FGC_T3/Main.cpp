@@ -44,9 +44,6 @@ int main()
     TransferFunction::addControlPoint(0, 0, 0, 0, 0);
     TransferFunction::addControlPoint(255, 255, 255, 255, 255);
     controlPointCount = TransferFunction::getControlPoints().size();
-    // Update Transfer Function
-    TransferFunction::getLinearFunction(rawModel->transferFunc);
-    rawModel->updateTransferFunctionTexture();
     // start editing window
     gui.setHwnd(window.getSystemHandle());
     guiSetup(window, gui);
@@ -86,8 +83,8 @@ void guiSetup(sf::Window &window, UIBuilder &gui)
     gui.addButton("Archivo", "Cargar Modelo Seleccionado", Callbacks::loadModelClick, NULL, "");
     //transfer func
     gui.addBar("Funcion de Transferencia");
-    gui.setBarSize("Funcion de Transferencia", 200, 200);
-    gui.setBarPosition("Funcion de Transferencia", window.getSize().x - 205, 5);
+    gui.setBarSize("Funcion de Transferencia", 200, 500);
+    gui.setBarPosition("Funcion de Transferencia", 5, 5);
 
     for (int i = 0; i < TransferFunction::getControlPoints().size(); i++) {
         // gui.addColorControls("Funcion de Transferencia", "Punto " + std::to_string(i + 1), TransferFunction::getControlPointColors(i), "");

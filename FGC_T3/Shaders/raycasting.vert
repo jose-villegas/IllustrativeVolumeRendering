@@ -12,7 +12,7 @@ out vec3 lightPos;
 
 uniform mat4 MVP;
 uniform mat4 ViewMatrix;
-uniform vec3 lightPosition = vec3(5.f, -10.f, 5.f);
+uniform vec3 lightPosition = vec3(10.f, -10.f, 10.f);
 
 void main()
 {

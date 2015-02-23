@@ -19,6 +19,7 @@ class TransferFunction {
         static void deleteAlphaControlPoint(unsigned const int index);
         static void getSmoothFunction(glm::vec4 *dst[256]);
         static void getLinearFunction(glm::vec4 dst[256]);
+        static void getLinearFunction(glm::vec2 dst[256]);
         static float *getControlPointColors(unsigned const int index);
 
         static const std::vector<ControlPoint> &getControlPoints()

@@ -108,6 +108,32 @@ void TransferFunction::getLinearFunction(glm::vec4 dst[256])
     }
 }
 
+void TransferFunction::getLinearFunction(glm::vec2 dst[256])
+{
+    std::vector<double> channel[3];
+    tk::Spline channelSpline[2];
+
+    // Control Points
+    for (int i = 0; i < controlPoints.size(); i++) {
+        channel[0].push_back(controlPoints[i].rgba[0]);
+        channel[1].push_back(controlPoints[i].rgba[3]);
+        channel[2].push_back(controlPoints[i].isoValue);
+    }
+
+    for (int i = 0; i < 2; i++) {
+        channelSpline[i].set_points(channel[2], channel[i], false);
+        channel[i].clear();
+
+        for (int k = 0; k < 256; k++) {
+            channel[i].push_back(channelSpline[i](k));
+        }
+    }
+
+    for (int i = 0; i < 256; i++) {
+        dst[i] = glm::vec2(channel[0][i], channel[1][i]);
+    }
+}
+
 void TransferFunction::deleteAlphaControlPoint(unsigned const int index)
 {
     controlPoints.erase(controlPoints.begin() + index);

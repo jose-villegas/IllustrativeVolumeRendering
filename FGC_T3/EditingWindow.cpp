@@ -214,7 +214,7 @@ void EditingWindow::drawHistogramAndTransferFunc()
     }
 
     // Update Transfer Function Real-Time
-    TransferFunction::getLinearFunction(this->rawModel->transferFunc);
+    // TransferFunction::getLinearFunction(this->rawModel->transferFunc);
     this->rawModel->updateTransferFunctionTexture();
 }
 

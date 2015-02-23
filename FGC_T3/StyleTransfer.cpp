@@ -97,7 +97,7 @@ void StyleTransfer::updateIndexFunctionTexture()
     indexFunction = new float[TransferFunction::getControlPoints().size()];
 
     for (int i = 0; i < TransferFunction::getControlPoints().size(); i++) {
-        indexFunction[i] = (float)availableStyles[i];
+        indexFunction[i] = (float)availableStyles[i] / (AVAILABLE_STYLE_COUNT - 1);
     }
 
     glTexImage1D(GL_TEXTURE_1D, 0, GL_INTENSITY, TransferFunction::getControlPoints().size(), 0, GL_LUMINANCE, GL_FLOAT, indexFunction);
@@ -105,20 +105,15 @@ void StyleTransfer::updateIndexFunctionTexture()
 
 void StyleTransfer::updateTransferFunctionTexture()
 {
-    for (int i = 0; i < TransferFunction::getControlPoints().size(); i++) {
-        TransferFunction::getControlPointColors(i)[0] = i;
+    int controlPointsSize = TransferFunction::getControlPoints().size();
+
+    for (int i = 0; i < controlPointsSize; i++) {
+        TransferFunction::getControlPointColors(i)[0] = i / (controlPointsSize - 1);
     }
 
-    glm::vec2 transferTexture[256];
-    TransferFunction::getLinearFunction(this->transferFunctionValues);
-
-    for (int i = 0; i < 256; i++) {
-        transferTexture[1].y = transferFunctionValues[i].a;
-        transferTexture[1].x = transferFunctionValues[i].r;
-    }
-
+    TransferFunction::getLinearFunction(this->transferTexture);
     glBindTexture(GL_TEXTURE_1D, transferFunctionTexture);
-    glTexImage1D(GL_TEXTURE_1D, 0, GL_RG8, 256, 0, GL_RG, GL_FLOAT, transferTexture);
+    glTexImage1D(GL_TEXTURE_1D, 0, GL_RG8, 256, 0, GL_RG, GL_FLOAT, this->transferTexture);
 }
 
 void StyleTransfer::loadStyles()
@@ -131,4 +126,4 @@ void StyleTransfer::loadStyles()
     stylesLoaded = true;
 }
 
-const std::string StyleTransfer::styleTextList = "litsphere3,litsphere3,litsphere3,litsphere3,litsphere3,litsphere3,litsphere3,litsphere3,litsphere3,litsphere3,litsphere3,litsphere3,red sphere,pink,dark glass,twilight fisheye,jeepster skinmat,josh shing matcap,dark grey metal,green shin metal,red metal,gooch,smooth,LitSphere,green,bluew2,bluew,blue green,daphz3,daphz2,daphz1,scooby skin,litsphere,litsphere2";
+const std::string StyleTransfer::styleTextList = "Default,Plastic Red,Green Shin,Ceramic Yellow,Aniso Metal,Sea Pebble,Marble,Yellow Wax,Shin Orange,Aniso Red,Beige Ceramic,Diffuse,Crest,Green Marble,Pink Plastic,Shin Aquamarine,Blue Spec,Green Pea,Gray,Brown,Green,Dark Glass,Gray Metal,Wax Yellow,Shinny Green,Ceramic Brown,Polished Wood,Fire,Coral,Rough Metal,Shinny Marble,Spec Grey,Shinny Grey,Border Grey";
