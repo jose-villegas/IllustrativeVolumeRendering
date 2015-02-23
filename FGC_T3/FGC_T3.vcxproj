@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{48FC435C-3F74-43BF-8FC1-0FB39DB7A7F4}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>FGC_T3</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\SFML\include;$(ProjectDir)AntTweakBar\include;$(ProjectDir)FreeImage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>true</BrowseInformation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\SFML\lib\x86;$(ProjectDir)AntTweakBar\lib;$(ProjectDir)FreeImage</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glu32.lib;opengl32.lib;freetype.lib;gdi32.lib;glew32s.lib;AntTweakBar.lib;FreeImage.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\SFML\include;$(ProjectDir)AntTweakBar\include;$(ProjectDir)FreeImage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\SFML\lib\x86;$(ProjectDir)AntTweakBar\lib;$(ProjectDir)FreeImage</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glu32.lib;opengl32.lib;freetype.lib;gdi32.lib;glew32s.lib;AntTweakBar.lib;FreeImage.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="EditingWindow.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainData.cpp" />
+    <ClCompile Include="RawDataModel.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="StyleTransfer.cpp" />
+    <ClCompile Include="TransferFunction.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UIBuilder.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Commons.h" />
+    <ClInclude Include="EditingWindow.h" />
+    <ClInclude Include="MainData.h" />
+    <ClInclude Include="RawDataModel.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="Spline.h" />
+    <ClInclude Include="StyleTransfer.h" />
+    <ClInclude Include="TransferFunction.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="UIBuilder.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\backface.frag" />
+    <None Include="Shaders\backface.vert" />
+    <None Include="Shaders\raycasting.frag" />
+    <None Include="Shaders\raycasting.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\screenshot1.jpg" />
+    <Image Include="Resources\Materials\litsphere (1).png" />
+    <Image Include="Resources\Materials\litsphere (10).png" />
+    <Image Include="Resources\Materials\litsphere (11).png" />
+    <Image Include="Resources\Materials\litsphere (12).png" />
+    <Image Include="Resources\Materials\litsphere (13).png" />
+    <Image Include="Resources\Materials\litsphere (14).png" />
+    <Image Include="Resources\Materials\litsphere (15).png" />
+    <Image Include="Resources\Materials\litsphere (16).png" />
+    <Image Include="Resources\Materials\litsphere (17).png" />
+    <Image Include="Resources\Materials\litsphere (18).png" />
+    <Image Include="Resources\Materials\litsphere (19).png" />
+    <Image Include="Resources\Materials\litsphere (2).png" />
+    <Image Include="Resources\Materials\litsphere (20).png" />
+    <Image Include="Resources\Materials\litsphere (21).png" />
+    <Image Include="Resources\Materials\litsphere (22).png" />
+    <Image Include="Resources\Materials\litsphere (23).png" />
+    <Image Include="Resources\Materials\litsphere (24).png" />
+    <Image Include="Resources\Materials\litsphere (25).png" />
+    <Image Include="Resources\Materials\litsphere (26).png" />
+    <Image Include="Resources\Materials\litsphere (27).png" />
+    <Image Include="Resources\Materials\litsphere (28).png" />
+    <Image Include="Resources\Materials\litsphere (29).png" />
+    <Image Include="Resources\Materials\litsphere (3).png" />
+    <Image Include="Resources\Materials\litsphere (30).png" />
+    <Image Include="Resources\Materials\litsphere (31).png" />
+    <Image Include="Resources\Materials\litsphere (32).png" />
+    <Image Include="Resources\Materials\litsphere (33).png" />
+    <Image Include="Resources\Materials\litsphere (34).png" />
+    <Image Include="Resources\Materials\litsphere (4).png" />
+    <Image Include="Resources\Materials\litsphere (5).png" />
+    <Image Include="Resources\Materials\litsphere (6).png" />
+    <Image Include="Resources\Materials\litsphere (7).png" />
+    <Image Include="Resources\Materials\litsphere (8).png" />
+    <Image Include="Resources\Materials\litsphere (9).png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

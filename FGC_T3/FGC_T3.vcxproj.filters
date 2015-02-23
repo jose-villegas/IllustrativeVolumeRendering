@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{73ee3853-d8c0-47eb-83bb-bf298984198d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RawDataModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TransferFunction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EditingWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StyleTransfer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RawDataModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Commons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransferFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditingWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StyleTransfer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\raycasting.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\raycasting.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\backface.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\backface.frag">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\screenshot1.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (1).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (2).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (3).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (4).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (5).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (6).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (7).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (8).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (9).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (10).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (11).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (12).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (13).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (14).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (15).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (16).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (17).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (18).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (19).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (20).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (21).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (22).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (23).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (24).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (25).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (26).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (27).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (28).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (29).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (30).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (31).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (32).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (33).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\Materials\litsphere (34).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

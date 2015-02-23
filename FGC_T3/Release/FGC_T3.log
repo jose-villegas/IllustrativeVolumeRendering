@@ -1,0 +1,35 @@
+﻿Build started 2/22/2015 2:41:22 AM.
+     1>Project "C:\Users\Jose\Documents\GitHub\Volume-Rendering\FGC_T3\FGC_T3.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\SFML\include /I"C:\Users\Jose\Documents\GitHub\Volume-Rendering\FGC_T3\AntTweakBar\include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _CRT_SECURE_NO_WARNINGS /D GLEW_STATIC /D WIN32 /D NDEBUG /D _CONSOLE /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp
+         Main.cpp
+     1>Main.cpp(39): warning C4316: 'RawDataModel' : object allocated on the heap may not be aligned 16
+     1>Main.cpp(104): warning C4018: '<' : signed/unsigned mismatch
+     1>Main.cpp(168): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>Main.cpp(169): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>Main.cpp(181): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>Main.cpp(182): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>Main.cpp(203): warning C4018: '<' : signed/unsigned mismatch
+     1>Main.cpp(213): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Main.cpp(214): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Jose\Documents\GitHub\Volume-Rendering\Release\FGC_T3.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\SFML\lib\x86 /LIBPATH:"C:\Users\Jose\Documents\GitHub\Volume-Rendering\FGC_T3\AntTweakBar\lib" glu32.lib opengl32.lib freetype.lib gdi32.lib glew32s.lib AntTweakBar.lib "sfml-graphics.lib" "sfml-window.lib" "sfml-system.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Jose\Documents\GitHub\Volume-Rendering\Release\FGC_T3.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Jose\Documents\GitHub\Volume-Rendering\Release\FGC_T3.lib" /MACHINE:X86 /SAFESEH Release\EditingWindow.obj
+         Release\Main.obj
+         Release\MainData.obj
+         Release\RawDataModel.obj
+         Release\Shader.obj
+         Release\ShaderProgram.obj
+         Release\StyleTransfer.obj
+         Release\TransferFunction.obj
+         Release\Transform.obj
+         Release\UIBuilder.obj
+     1>LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+         Generating code
+         Finished generating code
+     1>glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\Jose\Documents\GitHub\Volume-Rendering\Release\vc120.pdb'; linking object as if no debug info
+         FGC_T3.vcxproj -> C:\Users\Jose\Documents\GitHub\Volume-Rendering\Release\FGC_T3.exe
+     1>Done Building Project "C:\Users\Jose\Documents\GitHub\Volume-Rendering\FGC_T3\FGC_T3.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.59
