@@ -14,6 +14,7 @@ StyleTransfer::StyleTransfer() : stylesLoaded(false)
 
 StyleTransfer::~StyleTransfer()
 {
+    delete []wholeData;
 }
 
 void StyleTransfer::createTransferFunctionTexture()
@@ -108,7 +109,7 @@ void StyleTransfer::updateTransferFunctionTexture()
     int controlPointsSize = TransferFunction::getControlPoints().size();
 
     for (int i = 0; i < controlPointsSize; i++) {
-        TransferFunction::getControlPointColors(i)[0] = i / (controlPointsSize - 1);
+        TransferFunction::getControlPointColors(i)[0] = (float)i / (controlPointsSize - 1);
     }
 
     TransferFunction::getLinearFunction(this->transferTexture);

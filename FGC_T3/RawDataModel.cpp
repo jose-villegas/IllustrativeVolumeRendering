@@ -1,4 +1,5 @@
 #include "RawDataModel.h"
+#include "TransferFunction.h"
 
 RawDataModel::RawDataModel(void)
 {
@@ -298,6 +299,7 @@ void RawDataModel::createTransferFunctionTexture()
 
 void RawDataModel::updateTransferFunctionTexture()
 {
+    //TransferFunction::getLinearFunction(this->transferFunc);
     //glBindTexture(GL_TEXTURE_1D, transferFunctionTexture);
     //glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA8, 256, 0, GL_RGBA, GL_FLOAT, transferFunc);
     stf.updateIndexFunctionTexture();
@@ -336,7 +338,7 @@ void RawDataModel::setupVolumeShaders()
     this->rayCastShader.addUniform("MVP");
     this->rayCastShader.addUniform("VolumeTex");
     this->rayCastShader.addUniform("ExitPoints");
-    // this->rayCastShader.addUniform("TransferFunc");
+    this->rayCastShader.addUniform("TransferFunc");
     this->rayCastShader.addUniform("transferFunctionTexture");
     this->rayCastShader.addUniform("indexFunctionTexture");
     this->rayCastShader.addUniform("styleTransferTexture");
@@ -374,6 +376,9 @@ void RawDataModel::renderVolumeRayCasting()
     glActiveTexture(GL_TEXTURE5);
     glBindTexture(GL_TEXTURE_3D, this->volumeTexture);
     this->rayCastShader.setUniform("VolumeTex", 5);
+    //glActiveTexture(GL_TEXTURE6);
+    //glBindTexture(GL_TEXTURE_1D, this->transferFunctionTexture);
+    //this->rayCastShader.setUniform("TransferFunc", 6);
     renderCubeFace(GL_BACK);
 }
 

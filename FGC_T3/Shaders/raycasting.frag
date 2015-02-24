@@ -1,5 +1,6 @@
 #version 400
-#define LIGHTING
+// #define LIGHTING
+#define USE_THRESHOLD
 #define AVAILABLE_STYLE_COUNT 34
 
 in vec3 EntryPoint;
@@ -9,7 +10,6 @@ in vec3 lightPos;
 uniform mat4      NormalMatrix;
 uniform sampler3D VolumeTex;
 uniform sampler2D ExitPoints;
-uniform sampler1D TransferFunc;
 uniform float     StepSize = 0.01f;
 uniform float     Threshold = 0.15f;
 uniform vec2      ScreenSize;
@@ -23,11 +23,11 @@ layout(location = 0) out vec4 FragColor;
 
 vec3 computeGradient(vec3 P, float lookUp)
 {
-    float L = StepSize;
-    float E = texture(VolumeTex, P + vec3(L,0,0));
-    float N = texture(VolumeTex, P + vec3(0,L,0));
-    float U = texture(VolumeTex, P + vec3(0,0,L));
-    return vec3(E - lookUp, N - lookUp, U - lookUp);
+  float L = StepSize;
+  float E = texture(VolumeTex, P + vec3(L,0,0));
+  float N = texture(VolumeTex, P + vec3(0,L,0));
+  float U = texture(VolumeTex, P + vec3(0,0,L));
+  return vec3(E - lookUp, N - lookUp, U - lookUp);
 }
 
 float lambert(vec3 normal, vec3 position) {
@@ -40,124 +40,99 @@ float blinn_spec(vec3 normal, vec3 lightDir, vec3 viewDir, float shininess) {
   return pow(specAngle, shininess);
 }
 
-vec2 litsphere_map(vec3 normal, vec3 position) {
-  vec3 r = reflect(position, normal);
-  float m = 2.f * sqrt(
-    pow(r.x, 2.f) +
-    pow(r.y, 2.f) +
-    pow(r.z + 1.f, 2.f)
-    );
-  return (r.xy / m + 0.5f).xy;
+vec2 litsphere(vec3 normal, vec3 position) {
+  return vec2(normal.x, -normal.y) * 0.5f + 0.5f;
+}
+
+vec2 litsphere(vec3 normal, vec3 position, float len) {
+  return vec2(normal.x, -normal.y) * (1 - len) + len;
+}
+
+vec2 matcap(vec3 eye, vec3 normal) {
+  vec3 reflected = reflect(eye, normal);
+
+  float m = 2.0 * sqrt(
+    pow(reflected.x, 2.0) +
+    pow(reflected.y, 2.0) +
+    pow(reflected.z + 1.0, 2.0)
+  );
+
+  return reflected.xy / m + 0.5;
 }
 
 void main()
 {
-    vec3 exitPoint = texture(ExitPoints, gl_FragCoord.st / ScreenSize).xyz;
+  vec3 exitPoint = texture(ExitPoints, gl_FragCoord.st / ScreenSize).xyz;
 
-    if (EntryPoint == exitPoint)//background need no raycasting
-    {
-        discard;
-    }
+  if (EntryPoint == exitPoint) discard;//background need no raycasting
 
-    vec3 rayDirection = exitPoint - EntryPoint;
-    float rayLength = length(rayDirection); // the length from front to back is calculated and used to terminate the ray
-    vec3 stepVector = StepSize * rayDirection / rayLength;
+  vec3 rayDirection = exitPoint - EntryPoint;
+  float rayLength = length(rayDirection); // the length from front to back is calculated and used to terminate the ray
+  vec3 stepVector = StepSize * rayDirection / rayLength;
 
-    vec3 pos = EntryPoint;
-    vec4 dst = vec4(0.f);
+  vec3 pos = EntryPoint;
+  vec4 dst = vec4(0.f);
+  vec3 normal = vec3(1.f);
+  vec4 baseColor = vec4(1.f);
+  vec4 src = vec4(1.f);
 
-    while(dst.a < 1.f && rayLength > 0.f) {
-  		float density = texture(VolumeTex, pos).x;
+  while(dst.a < 1.f && rayLength > 0.f) {
+    float density = texture(VolumeTex, pos).x;
 
+    #ifdef USE_THRESHOLD
       if(density > Threshold) {
-        float opacity = texture(transferFunctionTexture, density).g;
-        float index = texture(transferFunctionTexture, density).r;
-        int materialIndex = int(texture(indexFunctionTexture, index).x * AVAILABLE_STYLE_COUNT);
+    #endif
 
-    	  // apply litsphere
-        vec3 normal = (mat4(NormalMatrix) * vec4(computeGradient(pos, density), 0.f)).xyz;
-        vec4 baseColor = texture(styleTransferTexture, vec3(litsphere_map(normal, pos).xy, materialIndex));
+    float opacity = texture(transferFunctionTexture, density).g;
+    float index = texture(transferFunctionTexture, density).r;
+    int styleIndex = int(texture(indexFunctionTexture, index).x * AVAILABLE_STYLE_COUNT);
+    vec3 previousNormal = normal;
 
-        // src value
-        vec4 src = vec4(baseColor.rgb, opacity);
+    // apply litsphere
+    normal = (mat4(NormalMatrix) * vec4(computeGradient(pos, density), 0.f)).xyz;
+    baseColor = texture(styleTransferTexture, vec3(litsphere(normal, pos).xy, styleIndex));
 
-        // add lighting
-        #ifdef LIGHTING
-    			float diffuse = lambert(normal, lightPos);
-    			float ambient = 0.1f * src.rgb; // fake ambient light
-    			src.rgb = (src.rgb * diffuse) + ambient;
-        #endif
+    // calculate curvate approximation
+    float magnitudes = length(normal) * length(previousNormal);
+    float curvature = acos(dot(normal, previousNormal) / magnitudes) * StepSize;
 
-        // add to result
-        src.a = 1.0 - pow(1.0 - src.a, StepSize * 256.0f);
-        src.rgb *= src.a;
-    		dst = (1.f - dst.a) * src + dst;
-        dst.a += (1.0 - dst.a) * src.a;
-      }
+    // apply contour
+    float thickness = 1.f;
+    float Tkv = thickness * curvature;
+    float cond = sqrt(Tkv * (2.f - Tkv));
+    float nDotV = abs(dot(normal, normalize(-pos)));
 
-  		// move further into the volume
-  		pos += stepVector;
-  		rayLength -= StepSize;
+    if(nDotV <= cond) {
+      float litDelta = 1.f - min(1.f, (cond - nDotV) / cond);
+      float adjustedLength = min(1.f, length(normal) / litDelta);
+      // weird trick to use matcap shader making contours show off
+      baseColor = texture(styleTransferTexture, vec3(matcap(ExitPointCoord.xyz, normal).xy, styleIndex));
+      // baseColor = texture(styleTransferTexture, vec3(litsphere(normal, pos, adjustedLength).xy, styleIndex));
+      // baseColor.rgb = vec3(0.0, 0.0, 0.0); // testing with pure color
     }
 
-    FragColor = dst;
-}
+    // src value
+    src = vec4(baseColor.rgb, opacity);
 
-// void main()
-// {
-//     vec3 exitPoint = texture(ExitPoints, gl_FragCoord.st / ScreenSize).xyz;
-//
-//     if (EntryPoint == exitPoint)//background need no raycasting
-//     {
-//         discard;
-//     }
-//
-//     vec3 dir = exitPoint - EntryPoint;
-//     float len = length(dir); // the length from front to back is calculated and used to terminate the ray
-//     vec3 deltaDir = normalize(dir) * StepSize;
-//     float deltaDirLen = length(deltaDir);
-//     vec3 voxelCoord = EntryPoint;
-//     vec4 colorAcum = vec4(0.0); // The dest color
-//     float alphaAcum = 0.0;                // The  dest alpha for blending
-//     float intensity;
-//     float lengthAcum = 0.0;
-//     vec4 colorSample; // The src color
-//     float alphaSample; // The src alpha
-//     // backgroundColor
-//     vec4 bgColor = vec4(0.0, 0.0, 0.0, 0.0);
-//
-//     for (int i = 0; i < 1600; i++)
-//     {
-//         intensity =  texture(VolumeTex, voxelCoord).x;
-//         colorSample = texture(TransferFunc, intensity);
-// 		    // colorSample = vec4(intensity);
-//
-//         // modulate the value of colorSample.a
-//         // front-to-back integration
-//         if (colorSample.a > 0.0)
-//         {
-//             colorSample.a = 1.0 - pow(1.0 - colorSample.a, StepSize * 200.0f);
-//             colorAcum.rgb += (1.0 - colorAcum.a) * colorSample.rgb * colorSample.a;
-//             colorAcum.a += (1.0 - colorAcum.a) * colorSample.a;
-//         }
-//
-//         voxelCoord += deltaDir;
-//         lengthAcum += deltaDirLen;
-//
-//         if (lengthAcum >= len)
-//         {
-//             colorAcum.rgb = colorAcum.rgb * colorAcum.a + (1 - colorAcum.a) * bgColor.rgb;
-//             break;  // terminate if opacity > 1 or the ray is outside the volume
-//         }
-//         else if (colorAcum.a > 1.0)
-//         {
-//             colorAcum.a = 1.0;
-//             break;
-//         }
-//     }
-//
-//     FragColor = colorAcum;
-//     // for test
-//     // FragColor = vec4(EntryPoint, 1.0);
-//     // FragColor = vec4(exitPoint, 1.0);
-// }
+    // add lighting
+    #ifdef LIGHTING
+      float diffuse = lambert(normal, lightPos);
+      float ambient = 0.1f * src.rgb; // fake ambient light
+      src.rgb = (src.rgb * diffuse) + ambient;
+    #endif
+
+    // add to result
+    src.rgb *= src.a;
+    dst = (1.f - dst.a) * src + dst;
+
+    #ifdef USE_THRESHOLD
+      }
+    #endif
+
+    // move further into the volume
+    pos += stepVector;
+    rayLength -= StepSize;
+  }
+
+  FragColor = dst;
+}
