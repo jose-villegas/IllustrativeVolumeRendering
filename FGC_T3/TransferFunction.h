@@ -22,9 +22,19 @@ class TransferFunction {
         static void getLinearFunction(glm::vec2 dst[256]);
         static float *getControlPointColors(unsigned const int index);
 
+        static const ControlPoint &getControlPoint(unsigned const int index)
+        {
+            return controlPoints[index];
+        };
+
         static const std::vector<ControlPoint> &getControlPoints()
         {
             return controlPoints;
+        }
+
+        static void Clear()
+        {
+            controlPoints.clear();
         }
 
 };

@@ -41,18 +41,18 @@ void EditingWindow::windowRender(EditingWindow *eWin)
     int index = 0;
 
     while (eWin->parent->isOpen() && eWin->window->isOpen()) {
-        eWin->controlPointChanged = false;
-
-        while (eWin->window->pollEvent(event)) {
-            if (event.type == sf::Event::MouseButtonPressed && sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
-                eWin->updateTransferFunction();
+        if (!eWin->stop) {
+            while (eWin->window->pollEvent(event)) {
+                if (event.type == sf::Event::MouseButtonPressed && sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
+                    eWin->updateTransferFunction();
+                }
             }
-        }
 
-        eWin->window->clear(sf::Color::Color(20, 20, 20, 255));
-        eWin->drawHistogramAndTransferFunc();
-        // draw
-        eWin->window->display();
+            eWin->window->clear(sf::Color::Color(20, 20, 20, 255));
+            eWin->drawHistogramAndTransferFunc();
+            // draw
+            eWin->window->display();
+        }
     }
 
     return;

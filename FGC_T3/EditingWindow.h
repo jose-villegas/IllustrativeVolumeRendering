@@ -31,6 +31,7 @@ class EditingWindow {
 
         static bool frameDone;
         bool controlPointChanged;
+        bool stop;
         void initOnSeparateThread(sf::RenderWindow *parent, RawDataModel *rawModel);
         void loadHistogram();
         EditingWindow(void);

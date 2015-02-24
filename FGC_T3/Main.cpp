@@ -57,6 +57,68 @@ int main()
     return 0;
 }
 
+struct FileDialog {
+    static void Save(char *sFilePath)
+    {
+        OPENFILENAME ofn;       // common dialog box structure
+        char szFile[1024] = { "" };       // buffer for file name
+        HWND hwnd = nullptr;              // owner window
+        HANDLE hf;              // file handle
+        // Initialize OPENFILENAME
+        ZeroMemory(&ofn, sizeof(ofn));
+        ofn.lStructSize = sizeof(ofn);
+        ofn.hwndOwner = hwnd;
+        ofn.lpstrFile = szFile;
+        // Set lpstrFile[0] to '\0' so that GetOpenFileName does not
+        // use the contents of szFile to initialize itself.
+        ofn.lpstrFile[0] = '\0';
+        ofn.nMaxFile = sizeof(szFile);
+        ofn.lpstrFilter = "TF\0*.tf\0";
+        ofn.nFilterIndex = 1;
+        ofn.lpstrFileTitle = NULL;
+        ofn.nMaxFileTitle = 0;
+        ofn.lpstrInitialDir = NULL;
+        ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+        // Display the Open dialog box.
+        if (GetSaveFileName(&ofn) == TRUE) {
+            std::string filename = std::string(szFile) + ".tf";
+            const size_t last_slash_idx = filename.find_last_of("\\/");
+            memcpy(sFilePath, &szFile[last_slash_idx + 1], 1024);
+        }
+    }
+
+    static void Open(char *sFilePath)
+    {
+        OPENFILENAME ofn;       // common dialog box structure
+        char szFile[1024] = { "" };       // buffer for file name
+        HWND hwnd = nullptr;              // owner window
+        HANDLE hf;              // file handle
+        // Initialize OPENFILENAME
+        ZeroMemory(&ofn, sizeof(ofn));
+        ofn.lStructSize = sizeof(ofn);
+        ofn.hwndOwner = hwnd;
+        ofn.lpstrFile = szFile;
+        // Set lpstrFile[0] to '\0' so that GetOpenFileName does not
+        // use the contents of szFile to initialize itself.
+        ofn.lpstrFile[0] = '\0';
+        ofn.nMaxFile = sizeof(szFile);
+        ofn.lpstrFilter = "TF\0*.tf\0";
+        ofn.nFilterIndex = 1;
+        ofn.lpstrFileTitle = NULL;
+        ofn.nMaxFileTitle = 0;
+        ofn.lpstrInitialDir = NULL;
+        ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+        // Display the Open dialog box.
+        if (GetOpenFileName(&ofn) == TRUE) {
+            std::string filename = std::string(szFile);
+            const size_t last_slash_idx = filename.find_last_of("\\/");
+            memcpy(sFilePath, &szFile[last_slash_idx + 1], 1024);
+        }
+    }
+};
+
 struct Callbacks {
     static void TW_CALL loadModelClick(void *clientData)
     {
@@ -66,29 +128,104 @@ struct Callbacks {
             eWindow.loadHistogram();
         }
     }
+
+    static void TW_CALL loadTransferFunction(void *clientData)
+    {
+        char filename[1024] = {};
+        // show save file dialog
+        std::thread dialogThread(FileDialog::Open, ((char *)filename));
+        dialogThread.join();
+
+        if (!filename[0]) return;
+
+        eWindow.stop = true;
+        jsoncons::json inFile = jsoncons::json::parse_file(filename);
+        jsoncons::json controlPoints = inFile["Control Points"];
+        TransferFunction::Clear();
+
+        for (int i = 0; i < controlPoints.size(); i++) {
+            try {
+                jsoncons::json &controlPoint = controlPoints[i];
+                int opacity = controlPoint["Opacity"].as<int>();
+                int isoValue = controlPoint["IsoValue"].as<int>();
+                int style = controlPoint["Style"].as<int>();
+                // save values
+                rawModel->stf.availableStyles[i] = style;
+                TransferFunction::addControlPoint(opacity, opacity, opacity, opacity, isoValue);
+            } catch (const jsoncons::json_exception &e) {
+                std::cerr << e.what() << std::endl;
+            }
+        }
+
+        TwRemoveAllVars(gui.getBar("Control Points"));
+
+        for (int i = 0; i < TransferFunction::getControlPoints().size(); i++) {
+            // gui.addColorControls("Funcion de Transferencia", "Punto " + std::to_string(i + 1), TransferFunction::getControlPointColors(i), "");
+            gui.addTextList("Control Points", "Point " + std::to_string(i + 1), StyleTransfer::styleTextList, &rawModel->stf.availableStyles[i], "");
+        }
+
+        eWindow.stop = false;
+    }
+
+    static void TW_CALL saveTransferFunction(void *clientData)
+    {
+        char filename[1024] = {};
+        // show save file dialog
+        std::thread dialogThread(FileDialog::Save, ((char *)filename));
+        dialogThread.join();
+
+        if (!filename[0]) return;
+
+        jsoncons::json outFile;
+        jsoncons::json stf(jsoncons::json::an_array);
+        eWindow.stop = true;
+
+        for (int i = 0; i < TransferFunction::getControlPoints().size(); i++) {
+            jsoncons::json controlPoint;
+            controlPoint["Opacity"] = (int)(TransferFunction::getControlPoint(i).rgba[3] * 255);
+            controlPoint["IsoValue"] = (int)TransferFunction::getControlPoint(i).isoValue;
+            controlPoint["Style"] = (int)rawModel->stf.availableStyles[i];
+            // add to final json
+            stf.add(controlPoint);
+        }
+
+        outFile["Control Points"] = stf;
+        // save output to file
+        std::ofstream outfile(filename);
+        outfile << jsoncons::pretty_print(outFile);
+        std::cout << jsoncons::pretty_print(outFile) << std::endl;
+        outfile.close();
+        eWindow.stop = false;
+    }
 };
 
 void guiSetup(sf::Window &window, UIBuilder &gui)
 {
     gui.init(window.getSize().x, window.getSize().y);
     // Model Loading
-    gui.addBar("Archivo");
-    gui.setBarPosition("Archivo", 5, window.getSize().y - 155);
-    gui.setBarSize("Archivo", 200, 130);
-    gui.addFileDialogButton("Archivo", "Seleccionar .RAW", rawModel->sModelName, "");
-    gui.addTextfield("Archivo", "Modelo: ", &rawModel->sModelName, "");
-    gui.addIntegerNumber("Archivo", "Ancho", &rawModel->width, "");
-    gui.addIntegerNumber("Archivo", "Largo", &rawModel->height, "");
-    gui.addIntegerNumber("Archivo", "Cortes", &rawModel->numCuts, "");
-    gui.addButton("Archivo", "Cargar Modelo Seleccionado", Callbacks::loadModelClick, NULL, "");
+    gui.addBar("Volumetric Data");
+    gui.setBarPosition("Volumetric Data", 5, window.getSize().y - 155);
+    gui.setBarSize("Volumetric Data", 200, 130);
+    gui.addFileDialogButton("Volumetric Data", "Load from .RAW", rawModel->sModelName, "");
+    gui.addTextfield("Volumetric Data", "Model name: ", &rawModel->sModelName, "");
+    gui.addIntegerNumber("Volumetric Data", "Width", &rawModel->width, "");
+    gui.addIntegerNumber("Volumetric Data", "Height", &rawModel->height, "");
+    gui.addIntegerNumber("Volumetric Data", "Depth", &rawModel->numCuts, "");
+    gui.addButton("Volumetric Data", "Load selected model", Callbacks::loadModelClick, NULL, "");
+    // transfer func save-load
+    gui.addBar("Transfer Function");
+    gui.setBarSize("Transfer Function", 200, 80);
+    gui.setBarPosition("Transfer Function", 5, window.getSize().y - 155 - 80 - 5);
+    gui.addButton("Transfer Function", "Cargar de .TF", Callbacks::loadTransferFunction, NULL, "");
+    gui.addButton("Transfer Function", "Guardar en .TF", Callbacks::saveTransferFunction, NULL, "");
     //transfer func
-    gui.addBar("Funcion de Transferencia");
-    gui.setBarSize("Funcion de Transferencia", 200, 500);
-    gui.setBarPosition("Funcion de Transferencia", 5, 5);
+    gui.addBar("Control Points");
+    gui.setBarSize("Control Points", 200, 500);
+    gui.setBarPosition("Control Points", 5, 5);
 
     for (int i = 0; i < TransferFunction::getControlPoints().size(); i++) {
         // gui.addColorControls("Funcion de Transferencia", "Punto " + std::to_string(i + 1), TransferFunction::getControlPointColors(i), "");
-        gui.addTextList("Funcion de Transferencia", "Punto " + std::to_string(i + 1), StyleTransfer::styleTextList, &rawModel->stf.availableStyles[i], "");
+        gui.addTextList("Control Points", "Point " + std::to_string(i + 1), StyleTransfer::styleTextList, &rawModel->stf.availableStyles[i], "");
     }
 }
 
@@ -183,11 +320,11 @@ void eventHandler(sf::Event &e, sf::RenderWindow &window)
     }
 
     if (controlPointCount != TransferFunction::getControlPoints().size()) {
-        TwRemoveAllVars(gui.getBar("Funcion de Transferencia"));
+        TwRemoveAllVars(gui.getBar("Control Points"));
 
         for (int i = 0; i < TransferFunction::getControlPoints().size(); i++) {
             // gui.addColorControls("Funcion de Transferencia", "Punto " + std::to_string(i + 1), TransferFunction::getControlPointColors(i), "");
-            gui.addTextList("Funcion de Transferencia", "Punto " + std::to_string(i + 1), StyleTransfer::styleTextList, &rawModel->stf.availableStyles[i], "");
+            gui.addTextList("Control Points", "Point " + std::to_string(i + 1), StyleTransfer::styleTextList, &rawModel->stf.availableStyles[i], "");
         }
 
         controlPointCount = TransferFunction::getControlPoints().size();
