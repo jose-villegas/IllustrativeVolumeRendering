@@ -48,11 +48,13 @@ int main()
     gui.setHwnd(window.getSystemHandle());
     guiSetup(window, gui);
     // start editing window
-    eWindow.initOnSeparateThread(&window, rawModel);
+    // eWindow.initOnSeparateThread(&window, rawModel);
+    eWindow.window = &window;
+    eWindow.RawModel(rawModel);
     // Initialze Main Loop
     Render(window, *MainData::frameClock);
     // Free Memory
-    eWindow.windowThread->join();
+    // eWindow.windowThread->join();
     delete rawModel;
     return 0;
 }
@@ -220,8 +222,8 @@ void guiSetup(sf::Window &window, UIBuilder &gui)
     gui.addButton("Transfer Function", "Guardar en .TF", Callbacks::saveTransferFunction, NULL, "");
     //transfer func
     gui.addBar("Control Points");
-    gui.setBarSize("Control Points", 200, 500);
-    gui.setBarPosition("Control Points", 5, 5);
+    gui.setBarSize("Control Points", 150, 130 + 80 + 5);
+    gui.setBarPosition("Control Points", 210, window.getSize().y - 155 - 80 - 5);
 
     for (int i = 0; i < TransferFunction::getControlPoints().size(); i++) {
         // gui.addColorControls("Funcion de Transferencia", "Punto " + std::to_string(i + 1), TransferFunction::getControlPointColors(i), "");
@@ -279,6 +281,8 @@ void eventHandler(sf::Event &e, sf::RenderWindow &window)
         int handled = TwEventSFML(&e, 1, 6);
 
         if (handled) return;
+
+        eWindow.eventHandler(e);
 
         if (e.type == sf::Event::Closed) {
             rawModel->isLoaded = false;
@@ -353,12 +357,14 @@ void eventHandler(sf::Event &e, sf::RenderWindow &window)
 void Render(sf::RenderWindow &window, sf::Clock &frameClock)
 {
     while (window.isOpen()) {
+        sf::Event e;
         // handle input events
-        eventHandler(sf::Event(), window);
+        eventHandler(e, window);
         // clear previous drawings
         window.clear();
         // Render OpenGL
         rawModel->render();
+        eWindow.drawHistogramAndTransferFunc();
         // draw ui
         TwDraw();
         // End Frame

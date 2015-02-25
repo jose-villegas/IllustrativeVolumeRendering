@@ -43,9 +43,7 @@ void EditingWindow::windowRender(EditingWindow *eWin)
     while (eWin->parent->isOpen() && eWin->window->isOpen()) {
         if (!eWin->stop) {
             while (eWin->window->pollEvent(event)) {
-                if (event.type == sf::Event::MouseButtonPressed && sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
-                    eWin->updateTransferFunction();
-                }
+                eWin->eventHandler(event);
             }
 
             eWin->window->clear(sf::Color::Color(20, 20, 20, 255));
@@ -215,6 +213,13 @@ void EditingWindow::drawHistogramAndTransferFunc()
 
     // Update Transfer Function Real-Time
     this->rawModel->updateTransferFunctionTexture();
+}
+
+void EditingWindow::eventHandler(sf::Event event)
+{
+    if (event.type == sf::Event::MouseButtonPressed && sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
+        updateTransferFunction();
+    }
 }
 
 bool EditingWindow::frameDone = false;

@@ -67,7 +67,7 @@ void RawDataModel::load(const char *pszFilepath, int width, int height, int numC
     float maxSize = std::max(std::max(width, height), numCuts);
     cubeSizes = glm::vec3(width / maxSize, height / maxSize, numCuts / maxSize);
     // move object to center
-    this->transform.scale = cubeSizes;
+    // this->transform.scale = cubeSizes;
     this->transform.setPosition(-cubeSizes.x / 2.f, -cubeSizes.y / 2.f, 0.f);
     // create matrices
     this->projection = glm::perspective(45.0f, (GLfloat)MainData::rootWindow->getSize().x / MainData::rootWindow->getSize().y, 0.1f, 500.f);
