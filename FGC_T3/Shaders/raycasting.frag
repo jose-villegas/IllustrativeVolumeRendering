@@ -1,7 +1,7 @@
 #version 400
 // #define LIGHTING
 #define USE_NOISE_JITTER
-#define USE_THRESHOLD
+// #define USE_THRESHOLD
 #define AVAILABLE_STYLE_COUNT 34
 
 in vec3 EntryPoint;
