@@ -1,7 +1,8 @@
 #version 400
 // #define LIGHTING
 #define USE_NOISE_JITTER
-// #define USE_THRESHOLD
+#define USE_THRESHOLD
+#define USE_CONTOUR
 #define AVAILABLE_STYLE_COUNT 34
 
 in vec3 EntryPoint;
@@ -41,12 +42,8 @@ float blinn_spec(vec3 normal, vec3 lightDir, vec3 viewDir, float shininess) {
   return pow(specAngle, shininess);
 }
 
-vec2 litsphere(vec3 normal, vec3 position) {
+vec2 litsphere(vec3 normal) {
   return vec2(normal.x, -normal.y) * 0.5f + 0.5f;
-}
-
-vec2 litsphere(vec3 normal, vec3 position, float len) {
-  return vec2(normal.x, -normal.y) * (1 - len) + len;
 }
 
 vec2 matcap(vec3 eye, vec3 normal) {
@@ -81,8 +78,8 @@ void main()
   vec3 pos = rayStart;
   vec4 dst = vec4(0.f);
   vec3 normal = vec3(1.f);
-  vec4 baseColor = vec4(1.f);
-  vec4 src = vec4(1.f);
+  vec4 baseColor = vec4(0.f);
+  vec4 src = vec4(0.f);
 
   while(dst.a < 1.f && rayLength > 0.f) {
     float density = texture(VolumeTex, pos).x;
@@ -98,26 +95,26 @@ void main()
 
     // apply litsphere
     normal = (mat4(NormalMatrix) * vec4(computeGradient(pos, density), 0.f)).xyz;
-    baseColor = texture(styleTransferTexture, vec3(litsphere(normal, pos).xy, styleIndex));
+    baseColor = texture(styleTransferTexture, vec3(litsphere(normal), styleIndex));
 
-    // calculate curvate approximation
-    float magnitudes = length(normal) * length(previousNormal);
-    float curvature = acos(dot(normal, previousNormal) / magnitudes) * StepSize;
+    #ifdef USE_CONTOUR
+      // calculate curvate approximation
+      float magnitudes = length(normal) * length(previousNormal);
+      float curvature = acos(dot(normal, previousNormal) / magnitudes) * StepSize;
 
-    // apply contour
-    float thickness = 1.f;
-    float Tkv = thickness * curvature;
-    float cond = sqrt(Tkv * (2.f - Tkv));
-    float nDotV = abs(dot(normal, normalize(-pos)));
+      // apply contour
+      float thickness = 1.f;
+      float Tkv = thickness * curvature;
+      float cond = sqrt(Tkv * (2.f - Tkv));
+      float nDotV = abs(dot(normal, normalize(-pos)));
 
-    if(nDotV <= cond) {
-      float litDelta = 1.f - min(1.f, (cond - nDotV) / cond);
-      float adjustedLength = min(1.f, length(normal) / litDelta);
-      // weird trick to use matcap shader making contours show off
-      baseColor = texture(styleTransferTexture, vec3(matcap(ExitPointCoord.xyz, normal).xy, styleIndex));
-      // baseColor = texture(styleTransferTexture, vec3(litsphere(normal, pos, adjustedLength).xy, styleIndex));
-      // baseColor.rgb = vec3(0.0, 0.0, 0.0); // testing with pure color
-    }
+      if(nDotV <= cond) {
+        float litDelta = 1.f - min(1.f, (cond - nDotV) / cond);
+        float adjustedLength = min(1.f, length(normal) / litDelta);
+        // weird trick to use matcap shader making contours show off
+        baseColor = texture(styleTransferTexture, vec3(matcap(pos.xyz, normal).xy, styleIndex));
+      }
+    #endif
 
     // src value
     src = vec4(baseColor.rgb, opacity);
