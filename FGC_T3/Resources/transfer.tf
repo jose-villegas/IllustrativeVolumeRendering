@@ -1,0 +1,45 @@
+{
+    "Control Points":
+    [
+        {
+            "IsoValue":0,
+            "Opacity":0,
+            "Style":0
+        },
+        {
+            "IsoValue":28,
+            "Opacity":0,
+            "Style":20
+        },
+        {
+            "IsoValue":36,
+            "Opacity":39,
+            "Style":5
+        },
+        {
+            "IsoValue":70,
+            "Opacity":0,
+            "Style":15
+        },
+        {
+            "IsoValue":85,
+            "Opacity":53,
+            "Style":30
+        },
+        {
+            "IsoValue":103,
+            "Opacity":0,
+            "Style":19
+        },
+        {
+            "IsoValue":106,
+            "Opacity":255,
+            "Style":26
+        },
+        {
+            "IsoValue":255,
+            "Opacity":255,
+            "Style":0
+        }
+    ]
+}
