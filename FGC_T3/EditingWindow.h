@@ -23,7 +23,6 @@ class EditingWindow {
         void initRenderContext();
         void updateTransferFunction();
         static void windowRender(EditingWindow *eWin);
-
     public:
 
         std::thread *windowThread;
@@ -34,7 +33,6 @@ class EditingWindow {
         bool controlPointChanged;
         bool stop;
         void initOnSeparateThread(sf::RenderWindow *parent, RawDataModel *rawModel);
-        void eventHandler(sf::Event event);
         void loadHistogram();
         EditingWindow(void);
         ~EditingWindow(void);
