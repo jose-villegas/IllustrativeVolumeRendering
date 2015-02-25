@@ -9,4 +9,6 @@ Uses volume rendering with raycasting which along with contour detection is quit
 
 ![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot1.png)
 
-![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot1.jpg)
+![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot2.png)
+
+![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot3.png)
