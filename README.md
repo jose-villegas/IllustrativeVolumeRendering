@@ -1,18 +1,12 @@
-Volume Rendering and Transfer Function
+Volume Rendering and Style Transfer Function
 ======
 
-Volume Rendering - Tarea de Fundamentos de la Computacion Grafica / Project for Computer Graphics
+Based on  http://www.cg.tuwien.ac.at/research/publications/2007/bruckner-2007-STF/ paper.
 
-Dependencias: GLM, SFML 2.1, OpenGL >~ 3.0, GLEW, AntTweakBar
+Lets you load a volume, save transfer functions (with assigned styles), load transfer functions, rotate and zoom around the volumetric data.
 
-Simple volume rendering using raytracing. 1D Transfer Function including editor, middle click to add a control point, left click to delete.
+Uses volume rendering with raycasting which along with contour detection is quite heavy on the GPU.
 
-Features:
+![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot1.png)
 
-* Camera Translation / Rotation
-* Model Rotation
-* 8/16 bits .RAW loading
-* Multithreadeding for transfer function calculations performance
-* Transfer Function UI / Editor
-
-![alt tag](http://i.imgur.com/ZacvjAG.png)
+![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot1.jpg)
