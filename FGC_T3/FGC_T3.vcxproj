@@ -129,13 +129,27 @@
     <ClInclude Include="UIBuilder.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\anaurism.tf" />
+    <None Include="Resources\aneurism_256x256x256.raw" />
+    <None Include="Resources\bonsai.tf" />
+    <None Include="Resources\bonsai_256x256x256.raw" />
+    <None Include="Resources\BostonTeapot.raw" />
+    <None Include="Resources\engine_256x256x128.raw" />
+    <None Include="Resources\metal.tf" />
+    <None Include="Resources\skull_256x256x256.raw" />
+    <None Include="Resources\test.tf" />
+    <None Include="Resources\tftf.tf" />
+    <None Include="Resources\transfer.tf" />
     <None Include="Shaders\backface.frag" />
     <None Include="Shaders\backface.vert" />
     <None Include="Shaders\raycasting.frag" />
     <None Include="Shaders\raycasting.vert" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\screenshot1.jpg" />
+    <Image Include="images\screenshot1.png" />
+    <Image Include="images\screenshot2.png" />
+    <Image Include="images\screenshot3.png" />
+    <Image Include="images\screenshot4.png" />
     <Image Include="Resources\Materials\litsphere (1).png" />
     <Image Include="Resources\Materials\litsphere (10).png" />
     <Image Include="Resources\Materials\litsphere (11).png" />

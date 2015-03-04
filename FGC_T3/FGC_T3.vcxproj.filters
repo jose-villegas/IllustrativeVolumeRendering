@@ -145,11 +145,19 @@
     <None Include="Shaders\backface.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Resources\anaurism.tf" />
+    <None Include="Resources\aneurism_256x256x256.raw" />
+    <None Include="Resources\bonsai.tf" />
+    <None Include="Resources\bonsai_256x256x256.raw" />
+    <None Include="Resources\BostonTeapot.raw" />
+    <None Include="Resources\engine_256x256x128.raw" />
+    <None Include="Resources\metal.tf" />
+    <None Include="Resources\skull_256x256x256.raw" />
+    <None Include="Resources\test.tf" />
+    <None Include="Resources\tftf.tf" />
+    <None Include="Resources\transfer.tf" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\screenshot1.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Resources\Materials\litsphere (1).png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -250,6 +258,18 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Resources\Materials\litsphere (34).png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\screenshot1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\screenshot2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\screenshot3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\screenshot4.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
