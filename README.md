@@ -8,6 +8,8 @@ Lets you load a volume, save transfer functions (with assigned styles), load tra
 
 ![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot1.png)
 
+![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot4.png)
+
 ![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot2.png)
 
 ![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot3.png)
