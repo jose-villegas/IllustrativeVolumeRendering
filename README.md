@@ -6,10 +6,10 @@ Based on  http://www.cg.tuwien.ac.at/research/publications/2007/bruckner-2007-ST
 Lets you load a volume, save transfer functions (with assigned styles), load transfer functions, rotate and zoom around the volumetric data.
 
 
-![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot1.png)
+![alt tag](https://github.com/jose-villegas/IllustrativeVolumeRendering/blob/master/FGC_T3/images/screenshot1.png?)
 
-![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot4.png)
+![alt tag](https://github.com/jose-villegas/IllustrativeVolumeRendering/blob/master/FGC_T3/images/screenshot4.png)
 
-![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot2.png)
+![alt tag](https://github.com/jose-villegas/IllustrativeVolumeRendering/blob/master/FGC_T3/images/screenshot2.png)
 
-![alt tag](https://raw.githubusercontent.com/jose-villegas/StyleTransferFunction/master/FGC_T3/images/screenshot3.png)
+![alt tag](https://github.com/jose-villegas/IllustrativeVolumeRendering/blob/master/FGC_T3/images/screenshot3.png)
